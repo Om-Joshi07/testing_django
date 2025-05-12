@@ -1,0 +1,187 @@
+
+
+{% extends "base.html" %}
+{% load socialaccount %}
+{% load static %}
+
+{% block title %} Register Page {% endblock %}
+
+{% block content %}
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+  body {
+    background: linear-gradient(to right, #a1c4fd, #c2e9fb);
+    font-family: 'Poppins', sans-serif;
+  }
+
+  .register-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 1rem;
+  }
+
+  .register-card {
+    background-color: #ffffff;
+    border-radius: 20px;
+    padding: 40px 50px;
+    max-width: 450px;
+    width: 100%;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+  }
+
+  .register-card:hover {
+    transform: scale(1.01);
+  }
+
+  .register-card h2 {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    color: #333;
+    font-weight: 600;
+  }
+
+  .form-label {
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+  }
+
+  .form-control {
+    border-radius: 10px;
+    padding: 0.75rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    width: 100%;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+
+  .form-control:focus {
+    border-color: #5b9bd5;
+    box-shadow: 0 0 8px rgba(91, 155, 213, 0.3);
+  }
+
+  .mb-3 {
+    margin-bottom: 1.8rem;
+  }
+
+  .btn-primary {
+    background-color: #5b9bd5;
+    border: none;
+    border-radius: 12px;
+    padding: 0.75rem 2rem;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+    display: block;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .btn-primary:hover {
+    background-color: #498ac3;
+  }
+
+  .btn-google {
+    background-color: #fff;
+    color: #444;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 0.65rem;
+    font-weight: 500;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: box-shadow 0.3s ease;
+    width: 100%;
+    margin-bottom: 1.5rem;
+  }
+
+  .btn-google:hover {
+    box-shadow: 0 0 10px rgba(66, 133, 244, 0.2);
+  }
+
+  .btn-google img {
+    height: 20px;
+    margin-right: 10px;
+  }
+
+  .text-center {
+    text-align: center;
+    margin-top: 1.2rem;
+  }
+
+  .text-center a {
+    color: #007bff;
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  .text-center a:hover {
+    text-decoration: underline;
+  }
+
+  .google-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    color: #555;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 0.6rem;
+    font-size: 1rem;
+    font-weight: 500;
+    margin-top: 1.5rem;
+    width: 100%;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+
+  .google-btn:hover {
+    background: #f8f8f8;
+  }
+
+  .google-icon {
+    height: 20px;
+    width: 20px;
+    margin-right: 10px;
+  }
+</style>
+
+<div class="container register-wrapper">
+  <div class="register-card">
+    <h2>Create an Account</h2>
+
+    <form method="POST">
+      {% csrf_token %}
+
+      <div class="mb-3">
+        <label for="exampleInputEmail1" class="form-label">Email address</label>
+        <input type="email" class="form-control" id="exampleInputEmail1" name="email" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label">Password</label>
+        <input type="password" class="form-control" id="exampleInputPassword1" name="password" required>
+      </div>
+
+      <button type="submit" class="btn btn-primary">Register</button>
+    </form>
+
+    <a href="{% provider_login_url 'google' %}" class="btn btn-google">
+      <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google icon">
+      Register with Google
+    </a>
+
+    <div class="text-center">
+      <a href="{% url 'login' %}">Login</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
