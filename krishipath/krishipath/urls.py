@@ -34,5 +34,5 @@ urlpatterns = [
     path('logins/', include('logins.urls')),
     path('accounts/', include('allauth.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
-
+    path('advisory/', include('advisory.urls')),
 ]

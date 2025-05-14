@@ -35,6 +35,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'logins',   # Login/Register Page
     'Home',     # Home Page
+    'advisory',
     # For google login
     'allauth',  # Authentication
     'allauth.account',

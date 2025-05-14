@@ -1,0 +1,128 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Accurate Location</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+          crossorigin=""/>
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        #map {
+            width: 40vw;
+            height: 40vh;
+        }
+    </style>
+</head>
+<body>
+    <h1>Soil Report</h1>
+    <div id="map"></div>
+
+
+    <div id="report">
+        {% if soil_data %}
+            <pre style="white-space: pre-wrap; font-family: monospace;">{{ soil_data }}</pre>
+        {% else %}
+            <p>❌ Soil data not available.</p>
+        {% endif %}
+    </div>
+
+    <!-- Hidden form -->
+    <form id="locationForm" method="POST" action="{% url 'soil_report' %}" style="display: none;">
+        {% csrf_token %}
+        <input type="hidden" name="latitude" id="latInput">
+        <input type="hidden" name="longitude" id="lonInput">
+    </form>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+            crossorigin=""></script>
+
+    <script>
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                showLocation, 
+                fallbackToIP, 
+                { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+            );
+        } else {
+            fallbackToIP();
+        }
+
+        function showLocation(position) {
+            // const lat = position.coords.latitude;
+            // const lon = position.coords.longitude;
+            const acc = position.coords.accuracy;
+
+            const lat = 28.775;
+            const lon = 80.262;
+
+
+
+            console.log(`📍 Location: ${lat}, ${lon} (Accuracy: ${acc}m)`);
+
+            const map = L.map('map').setView([lat, lon], 15);
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(map);
+
+            L.marker([lat, lon]).addTo(map).bindPopup("You are here").openPopup();
+            L.circle([lat, lon], {
+                radius: acc,
+                color: 'red',
+                fillColor: '#f03',
+                fillOpacity: 0.5
+            }).addTo(map);
+
+            // Feed location to form
+            document.getElementById('latInput').value = lat;
+            document.getElementById('lonInput').value = lon;
+
+            // Submit only once
+            if (!sessionStorage.getItem("formSubmitted")) {
+                sessionStorage.setItem("formSubmitted", "true");
+                document.getElementById('locationForm').submit();
+            }
+        }
+
+        async function fallbackToIP() {
+            console.log("Falling back to IP location...");
+            try {
+                const response = await fetch('https://ipapi.co/json/');
+                const data = await response.json();
+
+                const lat = data.latitude;
+                const lon = data.longitude;
+
+                const map = L.map('map').setView([lat, lon], 10);
+                L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; OpenStreetMap contributors'
+                }).addTo(map);
+                L.marker([lat, lon]).addTo(map).bindPopup("Approximate location").openPopup();
+
+                // Feed fallback location to form
+                document.getElementById('latInput').value = lat;
+                document.getElementById('lonInput').value = lon;
+
+                // Submit only once
+                if (!sessionStorage.getItem("formSubmitted")) {
+                    sessionStorage.setItem("formSubmitted", "true");
+                    document.getElementById('locationForm').submit();
+                }
+
+            } catch (error) {
+                console.error("Location failed completely", error);
+                alert("Could not determine your location.");
+            }
+        }
+    </script>
+</body>
+</html>
