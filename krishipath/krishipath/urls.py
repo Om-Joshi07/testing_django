@@ -31,6 +31,7 @@ from django.core.mail import send_mail
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', include('Home.urls')),
     path('logins/', include('logins.urls')),
     path('accounts/', include('allauth.urls')),
     path('accounts/', include('django.contrib.auth.urls')),

@@ -30,114 +30,43 @@ def user_login(request):
     return render(request, 'logins/login.html')
 
 
-# def user_register(request):
-#     if request.method == 'POST':
-#         email = request.POST.get('email')
-#         password = request.POST.get('password')
-#         try:
-#             User.objects.create_user(
-#                 username=email,
-#                 email=email,
-#                 password=password
-#             )
-#             return redirect('success')
-#         except IntegrityError:
-#             return HttpResponse("User already exists.")
-    
-#     return render(request, 'logins/register.html')
-
-
-
-# def user_register(request):
-#     if request.method == 'POST':
-#         email = request.POST.get('email')  # Changed from 'username' to 'email' to match your form
-#         password = request.POST.get('password')
-
-#         # Validate email format
-#         if not email or '@' not in email:
-#             return render(request, 'logins/register.html', {
-#                 'error': 'Please enter a valid email address.'
-#             })
-
-#         # Check if user exists (by both username and email)
-#         if User.objects.filter(username=email).exists() or User.objects.filter(email=email).exists():
-#             return render(request, 'logins/register.html', {
-#                 'error': 'An account with this email already exists.'
-#             })
-
-#         # Create user
-#         try:
-#             user = User.objects.create_user(
-#                 username=email,
-#                 email=email,
-#                 password=password
-#             )
-            
-#             # Optional: Log the user in directly after registration
-#             # user = authenticate(request, username=email, password=password)
-#             # if user:
-#             #     login(request, user)
-            
-#             return redirect('home')  # Or 'login' if you want them to log in manually
-        
-#         except Exception as e:
-#             return render(request, 'logins/register.html', {
-#                 'error': f'Registration failed: {str(e)}'
-#             })
-
-#     return render(request, 'logins/register.html')
-
-
-# def user_register(request):
-#     if request.method == 'POST':
-#         email = request.POST.get('email', '').strip()
-#         password = request.POST.get('password', '')
-
-#         context = {
-#             'email_value': email,  # To repopulate the email field
-#             'error': None  # Initialize error as None
-#         }
-
-#         # Validate email format
-#         if not email or '@' not in email:
-#             context['error'] = 'Please enter a valid email address.'
-#             return render(request, 'logins/register.html', context)
-
-#         # Check if user exists
-#         if User.objects.filter(email=email).exists():
-#             context['error'] = 'An account with this email already exists.'
-#             return render(request, 'logins/register.html', context)
-
-#         # Create user
-#         try:
-#             User.objects.create_user(
-#                 username=email,
-#                 email=email,
-#                 password=password
-#             )
-#             return redirect('success')
-        
-#         except Exception as e:
-#             context['error'] = 'Registration failed. Please try again.'
-#             return render(request, 'logins/register.html', context)
-
-#     return render(request, 'logins/register.html')
-
-
 
 def user_register(request):
     if request.method == 'POST':
         email = request.POST.get('email', '').strip().lower()
         password = request.POST.get('password', '')
+        confirm_password = request.POST.get('confirm_password', '')
+        full_name = request.POST.get('full_name', '').strip()
 
         context = {
-            'email_value': email,  # To repopulate the email field
+            'email_value': email,
+            'full_name_value': full_name,
             'error': None
         }
 
-        # Basic empty check
-        if not email or not password:
+        # Basic empty check for all fields
+        if not email or not password or not confirm_password or not full_name:
             context['error'] = 'Please fill in all fields.'
+            return render(request, 'logins/register.html', context)
+
+        # Full name validation (at least 2 words with letters only)
+        name_parts = full_name.split()
+        if len(name_parts) < 2:
+            context['error'] = 'Please enter your full name (first and last name).'
+            return render(request, 'logins/register.html', context)
+        
+        if not all(part.isalpha() for part in name_parts):
+            context['error'] = 'Name can only contain letters.'
+            return render(request, 'logins/register.html', context)
+
+        # Password confirmation check
+        if password != confirm_password:
+            context['error'] = 'Passwords do not match.'
+            return render(request, 'logins/register.html', context)
+
+        # Password strength check (optional)
+        if len(password) < 8:
+            context['error'] = 'Password must be at least 8 characters long.'
             return render(request, 'logins/register.html', context)
 
         # Comprehensive email validation
@@ -166,15 +95,21 @@ def user_register(request):
 
         # Create user
         try:
-            User.objects.create_user(
+            user = User.objects.create_user(
                 username=email,
                 email=email,
                 password=password
             )
+            # Add full name to user model (assuming your User model has first_name and last_name)
+            name_parts = full_name.split()
+            user.first_name = ' '.join(name_parts[:-1])
+            user.last_name = name_parts[-1]
+            user.save()
+            
             return redirect('success')
         
         except Exception as e:
-            context['error'] = 'Registration failed. Please try again.'
+            context['error'] = f'Registration failed. Please try again. Error: {str(e)}'
             return render(request, 'logins/register.html', context)
 
     return render(request, 'logins/register.html')
@@ -192,3 +127,7 @@ def home(request):
 
 def success(request):
     return HttpResponse("This is Success Page")
+
+
+def home(request):
+    return render(request, 'logins/home.html')
