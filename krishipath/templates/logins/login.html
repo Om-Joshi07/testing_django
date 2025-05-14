@@ -9,6 +9,7 @@
 <style>
   body {
     background-color: #f2f4f8;
+    background: #222222;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   }
 
@@ -122,7 +123,6 @@
         <input type="email" id="exampleInputEmail1" name="username" aria-describedby="emailHelp">
         {% comment %} Since built-in django UserModel takes username for everything and I don't want to make a custom UserModel, we fed it with username field but there is email {% endcomment %}
       </div>
-      <div class="form-text">We'll never share your email with anyone else.</div>
 
       <div class="form-group">
         <label for="exampleInputPassword1">Password</label>
