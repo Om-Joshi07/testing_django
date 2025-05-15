@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
 from django.core.mail import send_mail
-
+from . import views
 
 # def my_send_mail(*args, **kwargs):
 #     print("Sending mail with args:", args, kwargs)
@@ -30,10 +30,12 @@ from django.core.mail import send_mail
 
 
 urlpatterns = [
+    path('', views.home, name='home'),
     path('admin/', admin.site.urls),
-    path('', include('Home.urls')),
     path('logins/', include('logins.urls')),
     path('accounts/', include('allauth.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
     path('advisory/', include('advisory.urls')),
+    path('bot/', include('bot.urls')),
+    path('weather/', include('weather.urls')),
 ]

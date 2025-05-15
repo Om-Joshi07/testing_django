@@ -1,55 +1,5 @@
 
 
-
-# import requests as r
-
-# def soil_report(latitude, longitude):
-
-#     R = r.get(f"https://soil.narc.gov.np/soil/api/?lat={latitude}&lon={longitude}").json()
-
-#     if R:
-#       try:
-#         response= f'''
-#         print(f"🧾 Soil Report for {R['palika']}, {R['district']} District, {R['province']} Province\n")
-
-#         print("📍 Location Details:")
-#         print(f"  Latitude  : {R['coord']['lat']}")
-#         print(f"  Longitude : {R['coord']['lon']}")
-#         print(f"  Elevation : {R['coord']['elevation']} m")
-
-#         print("🌱 Soil Composition:")
-#         print(f"  pH                 : {R['ph']}")
-#         print(f"  Organic Matter     : {R['organic_matter']}")
-#         print(f"  Total Nitrogen     : {R['total_nitrogen']}")
-#         print(f"  Potassium (K)      : {R['potassium']}")
-#         print(f"  Phosphorus (P₂O₅)  : {R['p2o5']}")
-#         print(f"  Boron              : {R['boron'][0:4] +' mg/kg'}")
-#         print(f"  Zinc               : {R['zinc'][0:4] +' mg/kg'}")
-
-#         print("🧱 Soil Texture:")
-#         print(f"  Sand  : {R['sand']}")
-#         print(f"  Clay  : {R['clay']}")
-#         print(f"  Silt  : {R['slit']}\n")
-
-#         print("🪨 Parent Material:")
-#         print(f"  {R['parentsoil']}")
-
-#         '''
-
-#         return response 
-
-
-#       except:
-
-#         return "The soil information is not available."
-
-
-
-
-
-
-
-
 import requests as r
 
 def soil_data_fetch(latitude, longitude):
