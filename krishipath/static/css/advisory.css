@@ -5,6 +5,7 @@
     flex-direction: column;
     align-items: center;
     padding: 2rem;
+    background-color: red;
 }
 
 .report-section h1 {
