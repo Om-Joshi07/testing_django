@@ -1,40 +1,49 @@
+{% load static%}
+<style>
+  /* From Uiverse.io by cssbuttons-io */ 
+button {
+  padding: 0.6em 1.5em;
+  font-family: 'Montserrat', sans-serif;
+  
+  color: #000;
+  background-color: #bfe4a9;
+  border: none;
+  border-radius: 45px;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease 0s;
+  cursor: pointer;
+  outline: none;
+}
 
+button:hover {
+  background-color: #23c483;
+  box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4);
+  color: #fff;
+  transform: translateY(-7px);
+}
 
-{% load static %}
-<header class="navbar-wrapper">
-    <nav class="navbar">
-        <div class="navbar-brand">
-            <img src="{% static 'img/small_logo.png' %}" alt="KrishiPath" class="logo-img">
-        </div>
-        
-        <div class="navbar-collapse">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                  <a href="{% url 'home' %}" class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}">Home</a>
-                </li>
-                <li class="nav-item">
-                  <a href="{% url 'bot' %}" class="nav-link {% if request.resolver_match.url_name == 'bot' %}active{% endif %}">Chatbot</a>
-                </li>
-                <li class="nav-item">
-                  <a href="{% url 'soil_report' %}" class="nav-link {% if request.resolver_match.url_name == 'soil_report' %}active{% endif %}">Crop Advisory</a>
-                </li>
-                <li class="nav-item">
-                  <a href="{% url 'weather' %}" class="nav-link {% if request.resolver_match.url_name == 'weather' %}active{% endif %}">Weather Forecast</a>
-                </li>
-                
-            </ul>
+button:active {
+  transform: translateY(-1px);
+}
+</style>
+<nav class="navbar">
+  <div class="logo">
+    <a href="{% url 'home' %}"><img src="{% static 'img/small_logo.png' %}" alt="Logo"></a>
+  </div>
 
-            <div class="sign-in">
-              <a href="{% url 'signin' %}" class="btn">Sign In</a>
-            </div>
+  <ul class="nav-links">
+    <li><a href="{% url 'home' %}">Home</a></li>
+    <li><a href="{% url 'bot' %}">Chatbot</a></li>
+    <li><a href="{% url 'soil_report' %}">Crop Advisory</a></li>
+    <li><a href="{% url 'weather' %}">Weather Forecast</a></button></li>
+    <li><button><a href="{% url 'login' %}">Login</a></button></li>
+    <li><button><a href="{% url 'register' %}">Register</a></button></li>
+    <!-- <div class="round">
+    <img src="{% static 'img/login-img.jpg' %}" alt="User">
+  </div> -->
+  </ul>
 
-
-            
-            <button class="navbar-toggler" aria-label="Toggle navigation">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-        </div>
-    </nav>
-</header>
+  <!-- <div class="round">
+    <img src="{% static 'img/login-img.jpg' %}" alt="User">
+  </div> -->
+</nav>
