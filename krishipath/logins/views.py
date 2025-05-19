@@ -23,7 +23,7 @@ def user_login(request):
         user = authenticate(request, username=email, password=password)      # authenticate the user in the database
         if user:
             login(request, user)
-            return redirect('success')     # Works only for existing users; doesn't work for new users
+            return redirect('home')     # Works only for existing users; doesn't work for new users
         else:
             return HttpResponse("Invalid Credentials")
         
@@ -106,7 +106,7 @@ def user_register(request):
             user.last_name = name_parts[-1]
             user.save()
             
-            return redirect('success')
+            return redirect('home')
         
         except Exception as e:
             context['error'] = f'Registration failed. Please try again. Error: {str(e)}'

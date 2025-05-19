@@ -17,4 +17,3 @@ def generate_report(request):
             return render(request, 'advisory.html', {'error': 'Soil data not available.'})
     
     return render(request, 'advisory.html')
-

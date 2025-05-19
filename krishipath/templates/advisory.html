@@ -42,12 +42,12 @@
     }
 
     function showLocation(position) {
-        // const lat = position.coords.latitude;
-        // const lon = position.coords.longitude;
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
         const acc = position.coords.accuracy;
 
-        const lat = 29.607;
-        const lon = 81.872;
+        // const lat = 29.607;
+        // const lon = 81.872;
 
         const map = L.map('map').setView([lat, lon], 15);
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -119,123 +119,3 @@
 {% endblock %}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-{% comment %} 
-
-{% extends "base.html" %}
-{% load static %}
-{% block content %}
-
-<link rel="stylesheet" href="{% static 'css/advisory.css' %}">
-
-<section class="report-section">
-    <h1>🌱 Soil Report</h1>
-
-    <div id="map" class="map-container"></div>
-
-    <div id="report" class="report-box">
-        {% if soil_data %}
-            <pre>{{ soil_data }}</pre>
-        {% else %}
-            <p class="no-data">❌ Soil data not available.</p>
-        {% endif %}
-    </div>
-
-    <!-- Hidden form -->
-    <form id="locationForm" method="POST" action="{% url 'soil_report' %}">
-        {% csrf_token %}
-        <input type="hidden" name="latitude" id="latInput">
-        <input type="hidden" name="longitude" id="lonInput">
-    </form>
-</section>
-
-<!-- Leaflet CSS & JS -->
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-<script>
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(showLocation, fallbackToIP, {
-            enableHighAccuracy: true, timeout: 5000, maximumAge: 0
-        });
-    } else {
-        fallbackToIP();
-    }
-
-    function showLocation(position) {
-        // const lat = position.coords.latitude;
-        // const lon = position.coords.longitude;
-        const acc = position.coords.accuracy;
-
-
-        const lat = 29.607
-        const lon = 81.872
-
-
-
-        const map = L.map('map').setView([lat, lon], 15);
-        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; OpenStreetMap contributors'
-        }).addTo(map);
-
-        L.marker([lat, lon]).addTo(map).bindPopup("You are here").openPopup();
-        L.circle([lat, lon], {
-            radius: acc,
-            color: 'red',
-            fillColor: '#f03',
-            fillOpacity: 0.5
-        }).addTo(map);
-
-        document.getElementById('latInput').value = lat;
-        document.getElementById('lonInput').value = lon;
-
-        if (!sessionStorage.getItem("formSubmitted")) {
-            sessionStorage.setItem("formSubmitted", "true");
-            document.getElementById('locationForm').submit();
-        }
-    }
-
-    async function fallbackToIP() {
-        try {
-            const response = await fetch('https://ipapi.co/json/');
-            const data = await response.json();
-            const lat = data.latitude;
-            const lon = data.longitude;
-
-            const map = L.map('map').setView([lat, lon], 10);
-            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; OpenStreetMap contributors'
-            }).addTo(map);
-
-            L.marker([lat, lon]).addTo(map).bindPopup("Approximate location").openPopup();
-
-            document.getElementById('latInput').value = lat;
-            document.getElementById('lonInput').value = lon;
-
-            if (!sessionStorage.getItem("formSubmitted")) {
-                sessionStorage.setItem("formSubmitted", "true");
-                document.getElementById('locationForm').submit();
-            }
-
-        } catch (error) {
-            console.error("Location failed completely", error);
-            alert("Could not determine your location.");
-        }
-    }
-</script>
-
-{% endblock %} {% endcomment %}
